@@ -1,0 +1,24 @@
+name: Deploy Lab 8 App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@34.231.21.185 '
+            cd ~/lab8-cicd
+            git pull
+            docker-compose pull
+            docker-compose down
+            docker-compose up -d
+          '
